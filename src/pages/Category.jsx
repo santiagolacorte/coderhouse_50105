@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import ItemListContainer from "../components/ItemListContainer/ItemListContainer";
-import ProductsData from "../data/ProductsData.json";
+import { ItemListContainer } from "../components";
+import { useAllProductsByFilter } from "../hooks/useProducts";
 
-const Category = () => {
+export const Category = () => {
     const { categoryId } = useParams();
-    const [filteredProducts, setFilteredProducts] = useState([]);
+    const { products, loading, error } = useAllProductsByFilter("products", categoryId, "category");
 
-    useEffect(() => {
-        setFilteredProducts(ProductsData.filter(
-            (product) => product.category == categoryId
-        ))
-    }, [categoryId]);
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
-    return <ItemListContainer products={filteredProducts} />;
+    if (error) {
+        return <div>Error loading products.</div>;
+    }
+
+    console.log("Fetched products: ", products); // Debugging line
+
+    return <ItemListContainer products={products} />;
 };
-
-export default Category;

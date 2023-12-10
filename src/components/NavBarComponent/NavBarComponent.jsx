@@ -1,41 +1,29 @@
-import React from "react";
-import { Link } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import CartWidgetComponent from '../CartWidgetComponent/CartWidgetComponent';
-import ProductsData from "../../data/ProductsData.json";
+import { Link, NavLink } from 'react-router-dom';
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { CartWidgetComponent } from '../CartWidgetComponent';
 
-const NavBarComponent = () => {
-  const uniqueCategories = new Set(ProductsData.map(p => p.category));
+export const NavBarComponent = () => {
+    const categories = ["Hot beverages", "Cakes"];
 
-  return (
-    <Navbar bg="dark" expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand>
-          <Link to={"/"} style={{textDecoration: "none", color: "black"}}>Naif Café</Link>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Products</Nav.Link>
-            <NavDropdown title="Category" id="basic-nav-dropdown">
-              {[...uniqueCategories].map(category => (
-                <NavDropdown.Item key={category}>
-                  <Link to={`/category/${category}`} style={{ textDecoration: "none", color: "black" }}>
-                    {category}
-                  </Link>
-                </NavDropdown.Item>
-              ))}
-            </NavDropdown>
-          </Nav>
-          <CartWidgetComponent />
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
+    return (
+        <Navbar bg="dark" expand="lg" className="bg-body-tertiary">
+            <Container>
+                <Navbar.Brand as={Link} to="/" className="navbar-brand">Naif Café</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="me-auto">
+                        <Nav.Link as={NavLink} to="/">Home</Nav.Link>
+                        <NavDropdown title="Category" id="basic-nav-dropdown">
+                            {categories.map(category => (
+                                <NavDropdown.Item as={Link} to={`/category/${category.toLowerCase()}`} key={category}>
+                                    {category}
+                                </NavDropdown.Item>
+                            ))}
+                        </NavDropdown>
+                    </Nav>
+                    <CartWidgetComponent />
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
+    );
 };
-
-export default NavBarComponent;
